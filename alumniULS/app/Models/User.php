@@ -17,6 +17,13 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    
+    /**
+     * Define la relación con la tabla users.
+     *
+     * @var string
+     */
+    protected $table = 'usuarios';
 
     /**
      * The attributes that are mass assignable.
