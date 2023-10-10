@@ -9,12 +9,23 @@ use App\Models\User;
 
 class RolController extends Controller
 {
-    public function index()
+    public function getAll()
     {
         // Mostrar una lista de roles
         $roles = Rol::all();
-        return view('roles.index', compact('roles'));
+        return $roles;
+        //return view('roles.index', compact('roles'));
     }
+
+    public function adding(Request $request)
+    {
+        $items = new Rol();
+        $items->nombre_rol = $request->nombre_rol;
+
+        
+        $items->save();
+    }
+
 
     public function crear()
     {
