@@ -19,11 +19,11 @@ class TwoFactorAuthenticationSettingsTest extends TestCase
             return;
         }
 
-        $this->actingAs($user = User::factory()->create());
+        $user = User::factory()->create();
 
-        $this->withSession(['auth.password_confirmed_at' => time()]);
+        $this->actingAs($user)->withSession(['auth.password_confirmed_at' => now()]);
 
-        $response = $this->post('/user/two-factor-authentication');
+        $this->post('/user/two-factor-authentication');
 
         $this->assertNotNull($user->fresh()->two_factor_secret);
         $this->assertCount(8, $user->fresh()->recoveryCodes());
@@ -37,9 +37,9 @@ class TwoFactorAuthenticationSettingsTest extends TestCase
             return;
         }
 
-        $this->actingAs($user = User::factory()->create());
+        $user = User::factory()->create();
 
-        $this->withSession(['auth.password_confirmed_at' => time()]);
+        $this->actingAs($user)->withSession(['auth.password_confirmed_at' => now()]);
 
         $this->post('/user/two-factor-authentication');
         $this->post('/user/two-factor-recovery-codes');
@@ -48,7 +48,7 @@ class TwoFactorAuthenticationSettingsTest extends TestCase
 
         $this->post('/user/two-factor-recovery-codes');
 
-        $this->assertCount(8, $user->recoveryCodes());
+        $this->assertCount(8, $user->fresh()->recoveryCodes());
         $this->assertCount(8, array_diff($user->recoveryCodes(), $user->fresh()->recoveryCodes()));
     }
 
@@ -60,9 +60,9 @@ class TwoFactorAuthenticationSettingsTest extends TestCase
             return;
         }
 
-        $this->actingAs($user = User::factory()->create());
+        $user = User::factory()->create();
 
-        $this->withSession(['auth.password_confirmed_at' => time()]);
+        $this->actingAs($user)->withSession(['auth.password_confirmed_at' => now()]);
 
         $this->post('/user/two-factor-authentication');
 

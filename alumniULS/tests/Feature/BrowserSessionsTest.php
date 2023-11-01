@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class BrowserSessionsTest extends TestCase
@@ -12,7 +13,11 @@ class BrowserSessionsTest extends TestCase
 
     public function test_other_browser_sessions_can_be_logged_out(): void
     {
-        $this->actingAs($user = User::factory()->create());
+        $user = User::factory()->create([
+            'password' => Hash::make('password'),
+        ]);
+
+        $this->actingAs($user);
 
         $response = $this->delete('/user/other-browser-sessions', [
             'password' => 'password',

@@ -19,10 +19,12 @@ class CreateApiTokenTest extends TestCase
             return;
         }
 
-        $this->actingAs($user = User::factory()->withPersonalTeam()->create());
+        $user = User::factory()->create();
+
+        $this->actingAs($user);
 
         $response = $this->post('/user/api-tokens', [
-            'name' => 'Test Token',
+            'nombre_usuario' => 'Test Token',
             'permissions' => [
                 'read',
                 'update',
@@ -30,7 +32,7 @@ class CreateApiTokenTest extends TestCase
         ]);
 
         $this->assertCount(1, $user->fresh()->tokens);
-        $this->assertEquals('Test Token', $user->fresh()->tokens->first()->name);
+        $this->assertEquals('Test Token', $user->fresh()->tokens->first()->nombre_usuario);
         $this->assertTrue($user->fresh()->tokens->first()->can('read'));
         $this->assertFalse($user->fresh()->tokens->first()->can('delete'));
     }

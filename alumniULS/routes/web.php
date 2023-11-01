@@ -5,8 +5,10 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 use App\Http\Controllers\AlumniController;
-use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventoController;
 use App\Http\Controllers\CommunicationController;
+use App\Http\Controllers\ExalumnoController;
+use App\Http\Controllers\UsuarioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +38,15 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
+
+    // Rutas para usuarios 
+    Route::get('/usuarios/registrar', [UsuarioController::class, 'registrar']);
+    Route::post('/usuarios/guardar-registro', [UsuarioController::class, 'guardarRegistro'])->name('guardar-registro'); // Asegúrate de reemplazar 'nombre_de_ruta_guardar' con un nombre de ruta válido
+    Route::get('/usuarios/perfil', [UsuarioController::class, 'perfil']);
+    Route::get('/usuarios/editar-perfil', [UsuarioController::class, 'editarPerfil'])->name('editar-perfil');
+
+    
 
     // Rutas para exalumnos
     Route::resource('exalumnos', ExalumnoController::class);
@@ -119,8 +130,13 @@ Route::middleware([
         Route::post('/informes', 'InformeController@store')->name('informes.store');
         Route::get('/informes/{informe}', 'InformeController@show')->name('informes.show');
     });
-    
-
-
 
 });
+
+
+
+
+
+
+
+

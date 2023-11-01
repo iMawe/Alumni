@@ -16,24 +16,29 @@ class ApiTokenPermissionsTest extends TestCase
     {
         if (! Features::hasApiFeatures()) {
             $this->markTestSkipped('API support is not enabled.');
-
             return;
         }
 
-        $this->actingAs($user = User::factory()->withPersonalTeam()->create());
+        $user = User::factory()->create([
+            'nombre_usuario' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        $this->actingAs($user);
 
         $token = $user->tokens()->create([
-            'name' => 'Test Token',
+            'nombre_usuario' => 'Test Token',
             'token' => Str::random(40),
-            'abilities' => ['create', 'read'],
+            'abilities' => json_encode(['create', 'read']),
         ]);
 
         $response = $this->put('/user/api-tokens/'.$token->id, [
-            'name' => $token->name,
-            'permissions' => [
+            'nombre_usuario' => $token->nombre_usuario,
+            'abilities' => json_encode([
                 'delete',
                 'missing-permission',
-            ],
+            ]),
         ]);
 
         $this->assertTrue($user->fresh()->tokens->first()->can('delete'));
